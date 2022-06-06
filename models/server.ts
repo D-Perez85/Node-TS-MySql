@@ -1,5 +1,8 @@
 import express, {Application} from 'express';
 import userRoutes from '../routes/user';
+import Cors from 'cors';
+ 
+
 
 class Server{
 
@@ -12,8 +15,22 @@ class Server{
     constructor(){
         this.app  = express();
         this.port = process.env.PORT || '8000';
+        //Metodos iniciales
+        this.middlewares();
         this.routes(); 
     }
+    middlewares() {
+
+        // CORS
+        this.app.use( Cors() );
+
+        // Lectura del body
+        this.app.use( express.json() );
+
+        // Carpeta pública
+        this.app.use( express.static('public') );
+    }
+
 routes(){
     this.app.use(this.apiPath.users, userRoutes); 
 }
@@ -26,4 +43,8 @@ routes(){
 
 }
 export default Server;
+
+function cors(): any {
+    throw new Error('Function not implemented.');
+}
 
