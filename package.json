@@ -1,0 +1,19 @@
+{
+  "name": "06--ts-mysql",
+  "version": "1.0.0",
+  "description": "Node with TS and MySql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/D-Perez85/Node-TS-MySql.git"
+  },
+  "author": "D-Perez85",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/D-Perez85/Node-TS-MySql/issues"
+  },
+  "homepage": "https://github.com/D-Perez85/Node-TS-MySql#readme"
+}
