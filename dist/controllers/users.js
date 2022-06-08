@@ -32,13 +32,30 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUser = getUser;
-const postUser = (req, res) => {
+const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
-    res.json({
-        msg: "postUser",
-        body,
-    });
-};
+    try {
+        const existeEmail = yield user_1.default.findOne({
+            where: {
+                email: body.email
+            }
+        });
+        if (existeEmail) {
+            return res.status(400).json({
+                msg: 'Ya existe un usuario con el email ' + body.email
+            });
+        }
+        const user = yield user_1.default.create(body);
+        user.save();
+        res.json(user);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
+});
 exports.postUser = postUser;
 const putUser = (req, res) => {
     const { id } = req.params;

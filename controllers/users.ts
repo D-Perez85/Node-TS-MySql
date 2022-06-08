@@ -18,14 +18,43 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const postUser = (req: Request, res: Response) => {
+export const postUser = async( req: Request , res: Response ) => {
+
   const { body } = req;
 
-  res.json({
-    msg: "postUser",
-    body,
-  });
-};
+  try {
+      
+      const existeEmail = await User.findOne({
+          where: {
+              email: body.email
+          }
+      });
+
+      if (existeEmail) {
+          return res.status(400).json({
+              msg: 'Ya existe un usuario con el email ' + body.email
+          });
+      }
+
+
+      const user = await User.create(body);
+      user.save();
+
+      res.json( user );
+
+
+  } catch (error) {
+
+      console.log(error);
+      res.status(500).json({
+          msg: 'Hable con el administrador'
+      })    
+  }
+
+
+
+}
+
 
 export const putUser = (req: Request, res: Response) => {
   const { id } = req.params;
