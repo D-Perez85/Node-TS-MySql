@@ -18,9 +18,7 @@ const cors_1 = __importDefault(require("cors"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
     constructor() {
-        this.apiPath = {
-            users: '/api/users'
-        };
+        this.apiPath = { users: '/api/users' };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8000';
         //Metodos iniciales
@@ -57,7 +55,4 @@ class Server {
     }
 }
 exports.default = Server;
-function cors() {
-    throw new Error('Function not implemented.');
-}
 //# sourceMappingURL=server.js.map

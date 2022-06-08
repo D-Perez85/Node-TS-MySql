@@ -15,7 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.putUser = exports.postUser = exports.getUser = exports.getUsers = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const getUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield user_1.default.findAll();
+    const users = yield user_1.default.findAll({
+        where: {
+            estado: true,
+        },
+    });
     res.json({ users });
 });
 exports.getUsers = getUsers;
@@ -27,7 +31,7 @@ const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     else {
         res.status(404).json({
-            msg: `Controle el  id ingresado (${id}) -  no existe en base de datos`
+            msg: `Controle el  id ingresado (${id}) -  no existe en base de datos`,
         });
     }
 });
@@ -35,14 +39,10 @@ exports.getUser = getUser;
 const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     try {
-        const existeEmail = yield user_1.default.findOne({
-            where: {
-                email: body.email
-            }
-        });
+        const existeEmail = yield user_1.default.findOne({ where: { email: body.email } });
         if (existeEmail) {
             return res.status(400).json({
-                msg: 'Ya existe un usuario con el email ' + body.email
+                msg: "Ya existe un usuario con el email " + body.email,
             });
         }
         const user = yield user_1.default.create(body);
@@ -52,7 +52,7 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'Hable con el administrador'
+            msg: "Hable con el administrador",
         });
     }
 });
@@ -64,7 +64,7 @@ const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield user_1.default.findByPk(id);
         if (!user) {
             return res.status(404).json({
-                msg: 'No existe un user con el id ' + id
+                msg: "No existe un user con el id " + id,
             });
         }
         yield user.update(body);
@@ -73,17 +73,24 @@ const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     catch (error) {
         console.log(error);
         res.status(500).json({
-            msg: 'Hable con el administrador'
+            msg: "Hable con el administrador",
         });
     }
 });
 exports.putUser = putUser;
-const deleteUser = (req, res) => {
+const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    res.json({
-        msg: "deleteUser",
-        id,
-    });
-};
+    const user = yield user_1.default.findByPk(id);
+    if (!user) {
+        return res.status(404).json({
+            msg: "No existe un user con el id " + id,
+        });
+    }
+    /**  Baja logica  */
+    // await user.update({ estado: false });
+    /** Delete DB  */
+    yield user.destroy();
+    res.json(user);
+});
 exports.deleteUser = deleteUser;
 //# sourceMappingURL=users.js.map
