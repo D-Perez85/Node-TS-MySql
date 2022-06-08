@@ -57,15 +57,26 @@ const postUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.postUser = postUser;
-const putUser = (req, res) => {
+const putUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { body } = req;
-    res.json({
-        msg: "putUser",
-        body,
-        id
-    });
-};
+    try {
+        const user = yield user_1.default.findByPk(id);
+        if (!user) {
+            return res.status(404).json({
+                msg: 'No existe un user con el id ' + id
+            });
+        }
+        yield user.update(body);
+        res.json(user);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
+});
 exports.putUser = putUser;
 const deleteUser = (req, res) => {
     const { id } = req.params;
