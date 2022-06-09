@@ -35,8 +35,6 @@ export const postProduct = async (req: Request, res: Response) => {
           });
       }
     };
-
-
 export const putProduct = async (req: Request, res: Response) => {
     const { id } = req.params;
     const { body } = req
@@ -55,4 +53,15 @@ export const putProduct = async (req: Request, res: Response) => {
             msg: "Hable con el administrador",
         });
     }
+    };
+export const deleteProduct = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const product = await Product.findByPk(id);
+        if (!product) {
+        return res.status(404).json({
+            msg: "No existe un product con el id " + id,
+        });
+        }
+    await product.destroy();
+    res.json(product);
     };
