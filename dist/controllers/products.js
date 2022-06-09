@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postProduct = exports.getProduct = exports.getProducts = void 0;
+exports.putProduct = exports.postProduct = exports.getProduct = exports.getProducts = void 0;
 const products_1 = __importDefault(require("../models/products"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const products = yield products_1.default.findAll();
@@ -53,4 +53,25 @@ const postProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.postProduct = postProduct;
+const putProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { body } = req;
+    try {
+        const product = yield products_1.default.findByPk(id);
+        if (!product) {
+            return res.status(404).json({
+                msg: "No existe un product con el id " + id,
+            });
+        }
+        yield product.update(body);
+        res.json(product);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({
+            msg: "Hable con el administrador",
+        });
+    }
+});
+exports.putProduct = putProduct;
 //# sourceMappingURL=products.js.map
